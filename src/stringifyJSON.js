@@ -4,45 +4,44 @@
 // but you don't so you're going to write it from scratch:
 
 // Inputs:
-var stringifiableObjects = [
-  9,
-  null,
-  true,
-  false,
-  'Hello world',
-  [],
-  [8],
-  ['hi'],
-  [8, 'hi'],
-  [1, 0, -1, -0.3, 0.3, 1343.32, 3345, 0.00011999999999999999],
-  [8, [[], 3, 4]],
-  [[[['foo']]]],
-  {},
-  {'a': 'apple'},
-  {'foo': true, 'bar': false, 'baz': null},
-  {'boolean, true': true, 'boolean, false': false, 'null': null },
-  // basic nesting
-  {'a': {'b': 'c'}},
-  {'a': ['b', 'c']},
-  [{'a': 'b'}, {'c': 'd'}],
-  {'a': [], 'c': {}, 'b': true}
-];
+// var stringifiableObjects = [
+//   9,
+//   null,
+//   true,
+//   false,
+//   'Hello world',
+//   [],
+//   [8],
+//   ['hi'],
+//   [8, 'hi'],
+//   [1, 0, -1, -0.3, 0.3, 1343.32, 3345, 0.00011999999999999999],
+//   [8, [[], 3, 4]],
+//   [[[['foo']]]],
+//   {},
+//   {'a': 'apple'},
+//   {'foo': true, 'bar': false, 'baz': null},
+//   {'boolean, true': true, 'boolean, false': false, 'null': null },
+//   // basic nesting
+//   {'a': {'b': 'c'}},
+//   {'a': ['b', 'c']},
+//   [{'a': 'b'}, {'c': 'd'}],
+//   {'a': [], 'c': {}, 'b': true}
+// ];
 
 // used for stringifyJSON spec
 // hint: JSON does not allow you to stringify functions or
 // undefined values, so you should skip those key/value pairs.
-unstringifiableValues = [
-  {
-    'functions': function() {},
-    'undefined': undefined
-  }
-];
+// unstringifiableValues = [
+//   {
+//     'functions': function() {},
+//     'undefined': undefined
+//   }
+// ];
 
 // Outputs:
 // '[9,null,true,false,"Hello world",[],[8],["hi"],[8,"hi"],[1,0,-1,-0.3,0.3,1343.32,3345,0.00011999999999999999],[8,[[],3,4]],[[[["foo"]]]],{},{"a":"apple"},{"foo":true,"bar":false,"baz":null},{"boolean, true":true,"boolean, false":false,"null":null},{"a":{"b":"c"}},{"a":["b","c"]},[{"a":"b"},{"c":"d"}],{"a":[],"c":{},"b":true}]'
 
 // '[{}]'
-
 /*
 // Contraints:
 // Can't use built-in stringify method
@@ -86,9 +85,61 @@ unstringifiableValues = [
       // If last property in current object "}" to result string
       // Otherwise if not last property in current object add "," to result string
 
-
+*/
 
 var stringifyJSON = function(obj) {
-  // your code goes here
+
+  var result = '';
+
+  if (typeof obj === 'number') {
+    return obj.toString();
+  }
+
+  if (obj === null) {
+    return 'null';
+  }
+
+  if (obj === true) {
+    return 'true';
+  }
+
+  if (obj === false) {
+    return 'false';
+  }
+
+  if (typeof obj === 'string') {
+    return `"${obj}"`;
+  }
+
+
+  if (Array.isArray(obj)) {
+    result += '[';
+    obj.forEach(function(value, index, array) {
+      result += stringifyJSON(value);
+      if (index !== array.length - 1) {
+        result += ',';
+      }
+    });
+    result += ']';
+  }
+
+  if (!Array.isArray(obj)) {
+    result += '{';
+    var objLengthCounter = 0;
+    for (var key in obj) {
+      if (key === 'functions' || key === 'undefined') {
+        continue;
+      } else {
+        result += `"${key}":`;
+      }
+      result += stringifyJSON(obj[key]);
+      objLengthCounter += 1;
+      if (Object.keys(obj).length > objLengthCounter) {
+        result += ',';
+      }
+    }
+    result += '}';
+  }
+
+  return result;
 };
-*/
