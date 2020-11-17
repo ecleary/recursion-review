@@ -14,5 +14,5 @@ describe('stringifyJSON', function() {
       expect(result).to.equal(expected);
     });
 
-  });
+  }); // Test change
 });
